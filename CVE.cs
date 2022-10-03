@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Bot
 {
@@ -20,7 +16,17 @@ namespace Bot
             Description = desc;
             References = refs;
         }
-    
 
+        public string PrintCVEInfo()
+        {
+            var sb = new StringBuilder();
+            sb.Append($"{Id}: \n");
+            sb.Append($"{Description}: \n");
+            foreach(string r in References)
+            {
+                sb.Append($"{r}: \n");
+            }
+            return sb.ToString();
+        }
     }
 }

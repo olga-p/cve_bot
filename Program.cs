@@ -2,6 +2,8 @@
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
+using System.Text.RegularExpressions;
 
 namespace Bot
 {
@@ -24,11 +26,7 @@ namespace Bot
                 },
                 cts.Token);
 
-            var cveCol = new CVE_collection();
-
-            cveCol.GetCVEById("CVE-2022-3272");
-
-            Console.ReadLine();
+             Console.ReadLine();
             cts.Cancel();
 
         }
@@ -52,12 +50,74 @@ namespace Bot
 
         private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message)
         {
-            if (message.Type != MessageType.Text) return;
-            
+            if (message.Type != MessageType.Text || message.From.IsBot) return;
+
+            var cveCol = new CVE_collection();
+            Regex regex = new Regex(@"CVE-[0-9]{4}-[0-9]+");
+
             switch (message.Text)
             {
+                case "/start":
+                    ReplyKeyboardMarkup keyboard = new(new[]
+                    {
+                        new KeyboardButton[] {"Загрузить новые CVE в БД"},
+                        new KeyboardButton[] {"Найти CVE по ID", "Найти CVE по ключевому слову" }
+                    })
+                    {
+                        ResizeKeyboard = true
+                    };
+                    await botClient.SendTextMessageAsync(message.Chat.Id, $"Вас приветствует CVE-бот. Выберите действие:", replyMarkup: keyboard);
+                    break;
+                case "Найти CVE по ID":
+                    await botClient.SendTextMessageAsync(message.Chat.Id, $"Введите CVE Id:", replyMarkup: new ForceReplyMarkup());                  
+                    break;
+                case "Найти CVE по ключевому слову":
+                    await botClient.SendTextMessageAsync(message.Chat.Id, $"Введите ключевое слово:", replyMarkup: new ForceReplyMarkup());
+                    break;
+                case "Загрузить новые CVE в БД":
+                    var count = cveCol.GetNewCves();
+                    if (count > 0)
+                    {
+                        await botClient.SendTextMessageAsync(message.Chat.Id, $"Готово! Загружено {count} новых CVE");
+                    }
+                    else
+                    {
+                        await botClient.SendTextMessageAsync(message.Chat.Id, $"Новых CVE не найдено");
+                    }
+                    break;
+            }
 
+            if(message.ReplyToMessage != null)
+            {
+                var notFoundMessage = "По вашему запросу ничего не найдено";
+                MatchCollection matches = regex.Matches(message.Text);
+                if (matches.Count > 0)
+                {
+                    var wantedCve = cveCol.GetCVEById(message.Text);
+                    if(wantedCve == null)
+                    {
+                        await botClient.SendTextMessageAsync(message.Chat.Id, notFoundMessage);
+                        CreateKeyboard(botClient, message.Chat.Id);
+                        return;
+                    }
+                    await botClient.SendTextMessageAsync(message.Chat.Id, wantedCve.PrintCVEInfo());
+                    CreateKeyboard(botClient, message.Chat.Id);
+                    return;
 
+                }
+                var wantedCves = cveCol.GetCVEByKeyword(message.Text);
+                if (wantedCves.Count == 0)
+                {
+                    await botClient.SendTextMessageAsync(message.Chat.Id, notFoundMessage);
+                    CreateKeyboard(botClient, message.Chat.Id);
+                    return;
+                }
+                foreach (var cve in wantedCves)
+                {
+                    await botClient.SendTextMessageAsync(message.Chat.Id, cve.PrintCVEInfo());
+                    
+                }
+                CreateKeyboard(botClient, message.Chat.Id);
             }
 
         }
@@ -68,5 +128,19 @@ namespace Bot
             return Task.CompletedTask;
         }
 
-     }
+        public static async void CreateKeyboard(ITelegramBotClient botClient, long chatId)
+        {
+            ReplyKeyboardMarkup keyboard = new(new[]
+{
+                        new KeyboardButton[] {"Загрузить новые CVE в БД"},
+                        new KeyboardButton[] {"Найти CVE по ID", "Найти CVE по ключевому слову" }
+                    })
+            {
+                ResizeKeyboard = true
+            };
+            await botClient.SendTextMessageAsync(chatId, $"Выберите действие:", replyMarkup: keyboard);
+        }
+
+
+    }
 }

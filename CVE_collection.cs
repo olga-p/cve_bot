@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Net;
 using Npgsql;
+using Telegram.Bot.Types.ReplyMarkups;
+using Bot.DTO;
+
 
 
 namespace Bot
@@ -19,7 +19,7 @@ namespace Bot
             nc = new NpgsqlConnection(connString);
         }
 
-        public void GetNewCves()
+        public int GetNewCves()
         {
             WebClient wc = new WebClient();
 
@@ -36,10 +36,12 @@ namespace Bot
 
             ZipFile.ExtractToDirectory(zipPath, archDir.FullName);
 
+            int count = 0;
             foreach (FileInfo file in archDir.GetFiles("*.json"))
             {
                 var fs = file.Open(FileMode.Open);
                 byte[] b = new byte[file.Length];
+                
                 if (fs.Read(b, 0, b.Length) == file.Length)
                 {
                     var text = JsonDocument.Parse(b);
@@ -54,18 +56,20 @@ namespace Bot
                                 refs.Add(refCVE.url);
                             }
                             CVE newCve = new CVE(item.cve.CVE_data_meta.ID, item.cve.description.description_data[0].value, refs);
-                            LoadCVE2DB(newCve);
+                            if (LoadCVE2DB(newCve))
+                            {
+                                count++;
+                            }
                             //Console.WriteLine(item.cve.CVE_data_meta.ID);
                         }
                     }
                 }
 
             }
-
-            Console.WriteLine("Done");
+            return count;
         }
 
-        private void LoadCVE2DB(CVE cve)
+        private boolean LoadCVE2DB(CVE cve)
         {
             nc.Close();
             nc.Open();
@@ -76,78 +80,79 @@ namespace Bot
                 ndr.Close();
                 var description = cve.Description.Replace("'", " ");
                 npgc.CommandText = $"INSERT into cve VALUES ('{cve.Id}', '{description}') ";
-                int rows_changed = npgc.ExecuteNonQuery();
+                npgc.ExecuteNonQuery();
 
                 foreach (string url in cve.References)
                 {
                     npgc.CommandText = $"INSERT INTO refs (ref_url, cve_id) VALUES ('{url}', '{cve.Id}') ";
 
-                    rows_changed = npgc.ExecuteNonQuery();
+                    npgc.ExecuteNonQuery();
                 }
 
             }
             nc.Close();
+            return !ndr.HasRows;
         }
 
-        public void GetCVEById(string cve)
+        public CVE GetCVEById(string cve)
         {
-            nc.Close();
             nc.Open();
+
+            cve = cve.ToUpper();
             NpgsqlCommand npgc = new NpgsqlCommand($"SELECT * from cve WHERE cve_id = '{cve}'", nc);
             NpgsqlDataReader ndr = npgc.ExecuteReader();
+           
+            if (ndr.Read())
+            {
+                var cveId = ndr.GetValue(0).ToString();
+                var desc = ndr.GetValue(1).ToString();
+                var nc2 = new NpgsqlConnection(connString);
+                nc2.Open();
+                NpgsqlCommand qwe = new NpgsqlCommand($"SELECT * from refs WHERE cve_id = '{cveId}'", nc2);
+                NpgsqlDataReader rdr = qwe.ExecuteReader();
+                var refs = new List<string>();
+                while (rdr.Read())
+                {
+                    refs.Add(rdr.GetValue(1).ToString());
+                }               
+                rdr.Close();
+                nc2.Close();
+                nc.Close();
+
+                return new CVE(cveId, desc, refs);
+            }
+            ndr.Close();
+            nc.Close();
+            return null;
+        }
+        
+        public List<CVE> GetCVEByKeyword(string keyword)
+        {
+            nc.Open();
+            NpgsqlCommand npgc = new NpgsqlCommand($"SELECT * from cve WHERE description ILIKE '%{keyword}%'  ORDER BY id DESC LIMIT 10", nc);
+            NpgsqlDataReader ndr = npgc.ExecuteReader();
+            var cveList = new List<CVE>();
             while (ndr.Read())
             {
+                var cveId = ndr.GetValue(0).ToString();
                 var desc = ndr.GetValue(1).ToString();
-                Console.WriteLine(desc);
+                var nc2 = new NpgsqlConnection(connString);
+                nc2.Open();
+                NpgsqlCommand qwe = new NpgsqlCommand($"SELECT * from refs WHERE cve_id = '{cveId}'", nc2);
+                NpgsqlDataReader rdr = qwe.ExecuteReader();
+                var refs = new List<string>();
+                while (rdr.Read())
+                {
+                    refs.Add(rdr.GetValue(1).ToString());
+                }
+                rdr.Close();
+                nc2.Close();
+                cveList.Add(new CVE(cveId, desc, refs));
+
             }
-        }
-
-        private void GetCVEByKeyword(string keyword)
-        {
+            ndr.Close();
             nc.Close();
-            nc.Open();
-            NpgsqlCommand npgc = new NpgsqlCommand($"SELECT * from cve WHERE description LIKE '%{keyword}%'", nc);
-            NpgsqlDataReader ndr = npgc.ExecuteReader();
-
+            return cveList;
         }
-
-    }
-
-    class CVE_items_dto
-    {
-        public CVE_item_dto[] CVE_Items { get; set; }
-    }
-    class CVE_item_dto
-    {
-        public cve_dto cve { get; set; }
-        
-    }
-
-    class cve_dto
-    {
-        public CVE_data_meta_dto CVE_data_meta { get; set; }
-        public description_dto description { get; set; }
-        public references_dto references { get; set; }
-    }
-
-    class CVE_data_meta_dto
-    {
-        public string ID { get; set; }
-    }
-    class description_dto
-    {
-        public description_data_dto[] description_data { get; set; }
-    }
-    class description_data_dto
-    {
-        public string value { get; set; }
-    }
-    class references_dto
-    {
-        public reference_data_dto[] reference_data { get; set; }
-    }
-    class reference_data_dto
-    {
-        public string url { get; set; }
     }
 }
