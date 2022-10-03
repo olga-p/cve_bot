@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\repos\\CVE_bot\\Bot\\Bot.csproj": {}
+    "D:\\lessons\\CVE_bot\\Bot\\Bot.csproj": {}
   },
   "projects": {
-    "C:\\repos\\CVE_bot\\Bot\\Bot.csproj": {
+    "D:\\lessons\\CVE_bot\\Bot\\Bot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\repos\\CVE_bot\\Bot\\Bot.csproj",
+        "projectUniqueName": "D:\\lessons\\CVE_bot\\Bot\\Bot.csproj",
         "projectName": "Bot",
-        "projectPath": "C:\\repos\\CVE_bot\\Bot\\Bot.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\repos\\CVE_bot\\Bot\\obj\\",
+        "projectPath": "D:\\lessons\\CVE_bot\\Bot\\Bot.csproj",
+        "packagesPath": "C:\\Users\\Sergey\\.nuget\\packages\\",
+        "outputPath": "D:\\lessons\\CVE_bot\\Bot\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Sergey\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,10 +43,6 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Microsoft.Data.Sqlite": {
-              "target": "Package",
-              "version": "[6.0.8, )"
-            },
             "Npgsql": {
               "target": "Package",
               "version": "[6.0.7, )"
@@ -72,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.304\\RuntimeIdentifierGraph.json"
         }
       }
     }

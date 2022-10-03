@@ -2,7 +2,6 @@
 using System.Text.Json;
 using System.Net;
 using Npgsql;
-using Telegram.Bot.Types.ReplyMarkups;
 using Bot.DTO;
 
 
@@ -69,7 +68,7 @@ namespace Bot
             return count;
         }
 
-        private boolean LoadCVE2DB(CVE cve)
+        private bool LoadCVE2DB(CVE cve)
         {
             nc.Close();
             nc.Open();
