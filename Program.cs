@@ -52,7 +52,7 @@ namespace Bot
         {
             if (message.Type != MessageType.Text || message.From.IsBot) return;
 
-            var cveCol = new CVE_collection();
+            var cveCol = new CVECollection();
             Regex regex = new Regex(@"CVE-[0-9]{4}-[0-9]+");
 
             switch (message.Text)
@@ -84,6 +84,9 @@ namespace Bot
                     {
                         await botClient.SendTextMessageAsync(message.Chat.Id, $"Новых CVE не найдено");
                     }
+                    break;
+                default:
+                    CreateKeyboard(botClient, message.Chat.Id);
                     break;
             }
 

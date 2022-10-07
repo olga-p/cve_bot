@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "j/MuoJrPqAqLmvl+5zBH6+NaSDXFq5se6XVDh/8cbpfdhDxLBM9yrccNP/i7eceDe8CK1sV0Cw6s4OO0guxwcQ==",
+  "dgSpecHash": "lg3GjcR09Wqcoq6w38Zzew7AzWAqVoSaOk7JNHM0NRa2ADSXeIDjLKOjl/KomXMox3AoSIuXQgbtQ8rVqHs0Rg==",
   "success": true,
-  "projectFilePath": "D:\\lessons\\CVE_bot\\Bot\\Bot.csproj",
+  "projectFilePath": "C:\\repos\\CVE_bot\\Bot\\Bot.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Sergey\\.nuget\\packages\\newtonsoft.json\\12.0.2\\newtonsoft.json.12.0.2.nupkg.sha512",
-    "C:\\Users\\Sergey\\.nuget\\packages\\npgsql\\6.0.7\\npgsql.6.0.7.nupkg.sha512",
-    "C:\\Users\\Sergey\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
-    "C:\\Users\\Sergey\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
-    "C:\\Users\\Sergey\\.nuget\\packages\\telegram.bot\\18.0.0\\telegram.bot.18.0.0.nupkg.sha512",
-    "C:\\Users\\Sergey\\.nuget\\packages\\telegram.bot.extensions.polling\\1.0.2\\telegram.bot.extensions.polling.1.0.2.nupkg.sha512"
+    "C:\\Users\\user\\.nuget\\packages\\newtonsoft.json\\12.0.2\\newtonsoft.json.12.0.2.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\npgsql\\6.0.7\\npgsql.6.0.7.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\telegram.bot\\18.0.0\\telegram.bot.18.0.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\telegram.bot.extensions.polling\\1.0.2\\telegram.bot.extensions.polling.1.0.2.nupkg.sha512"
   ],
   "logs": []
 }

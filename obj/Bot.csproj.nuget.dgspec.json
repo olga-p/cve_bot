@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\lessons\\CVE_bot\\Bot\\Bot.csproj": {}
+    "C:\\repos\\CVE_bot\\Bot\\Bot.csproj": {}
   },
   "projects": {
-    "D:\\lessons\\CVE_bot\\Bot\\Bot.csproj": {
+    "C:\\repos\\CVE_bot\\Bot\\Bot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\lessons\\CVE_bot\\Bot\\Bot.csproj",
+        "projectUniqueName": "C:\\repos\\CVE_bot\\Bot\\Bot.csproj",
         "projectName": "Bot",
-        "projectPath": "D:\\lessons\\CVE_bot\\Bot\\Bot.csproj",
-        "packagesPath": "C:\\Users\\Sergey\\.nuget\\packages\\",
-        "outputPath": "D:\\lessons\\CVE_bot\\Bot\\obj\\",
+        "projectPath": "C:\\repos\\CVE_bot\\Bot\\Bot.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\repos\\CVE_bot\\Bot\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Sergey\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -71,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.304\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
