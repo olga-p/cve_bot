@@ -10,7 +10,7 @@ namespace Bot
 {
     internal class CVECollection
     {
-        private string connString = "Host=127.0.0.1;Username=postgres;Password=cdrhawa7;Database=cve_db";
+        private string connString = "Host=127.0.0.1;Username=postgres;Password=*******;Database=cve_db";
         private NpgsqlConnection nc;
 
         public CVECollection()
